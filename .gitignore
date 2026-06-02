@@ -1,0 +1,19 @@
+# Maven
+target/
+dependency-reduced-pom.xml
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# H2 local DB
+*.db
+*.mv.db
+*.trace.db
+
+# Logs & egyéb
+*.log
+*.class
+.DS_Store
