@@ -24,6 +24,15 @@ public class FoxRepository {
         return Optional.ofNullable(em.find(Fox.class, id));
     }
 
+    public Optional<Fox> findFirstWithoutImage() {
+        return em.createQuery(
+                        "SELECT f FROM Fox f WHERE f.image IS NULL OR f.image = '' ORDER BY f.id", Fox.class)
+                .setMaxResults(1)
+                .getResultList()
+                .stream()
+                .findFirst();
+    }
+
     public Fox save(Fox fox) {
         if (fox.getId() == null) {
             em.persist(fox);
