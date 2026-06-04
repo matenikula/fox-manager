@@ -1,13 +1,15 @@
 package hu.matenikula.foxmanager.rest;
 
 import hu.matenikula.foxmanager.domain.Fox;
+import hu.matenikula.foxmanager.exception.RequestValidationException;
 import hu.matenikula.foxmanager.rest.dto.FoxMapper;
 import hu.matenikula.foxmanager.rest.dto.FoxRequest;
 import hu.matenikula.foxmanager.rest.dto.FoxResponse;
 import hu.matenikula.foxmanager.service.FoxService;
 
 import javax.inject.Inject;
-import javax.validation.Valid;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -15,6 +17,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Path("/foxes")
@@ -24,6 +27,8 @@ public class FoxResource {
 
     @Inject
     private FoxService foxService;
+    @Inject
+    private Validator validator;
 
     @GET
     public List<FoxResponse> getAll() {
@@ -39,7 +44,11 @@ public class FoxResource {
     }
 
     @POST
-    public Response create(@Valid FoxRequest request, @Context UriInfo uriInfo) {
+    public Response create(FoxRequest request, @Context UriInfo uriInfo) {
+        Set<ConstraintViolation<FoxRequest>> violations = validator.validate(request);
+        if (!violations.isEmpty()) {
+            throw new RequestValidationException(violations);
+        }
         Fox created = foxService.createFox(FoxMapper.toEntity(request));
         URI location = uriInfo.getAbsolutePathBuilder()
                 .path(String.valueOf(created.getId()))

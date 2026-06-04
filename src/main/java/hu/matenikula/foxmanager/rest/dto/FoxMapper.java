@@ -1,6 +1,7 @@
 package hu.matenikula.foxmanager.rest.dto;
 
 import hu.matenikula.foxmanager.domain.Fox;
+import hu.matenikula.foxmanager.domain.Gender;
 
 public final class FoxMapper {
 
@@ -11,7 +12,7 @@ public final class FoxMapper {
         Fox fox = new Fox();
         fox.setName(request.getName());
         fox.setSpecies(request.getSpecies());
-        fox.setGender(request.getGender());
+        fox.setGender(Gender.valueOf(request.getGender()));
         fox.setImage(request.getImage());
         return fox;
     }
