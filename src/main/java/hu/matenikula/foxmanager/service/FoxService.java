@@ -9,6 +9,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -37,5 +38,16 @@ public class FoxService {
         if (!foxRepository.deleteById(id)) {
             throw new FoxNotFoundException(id);
         }
+    }
+
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Optional<Fox> findFoxWithoutImage() {
+        return foxRepository.findFirstWithoutImage();
+    }
+
+    public void assignImage(Long foxId, String imageUrl) {
+        Fox fox = foxRepository.findById(foxId)
+                .orElseThrow(() -> new FoxNotFoundException(foxId));
+        fox.setImage(imageUrl);
     }
 }
