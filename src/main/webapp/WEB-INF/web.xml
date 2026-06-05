@@ -7,7 +7,7 @@
     <data-source>
         <name>java:app/datasources/foxDS</name>
         <class-name>org.h2.jdbcx.JdbcDataSource</class-name>
-        <url>jdbc:h2:file:~/fox-manager-data/foxdb;AUTO_SERVER=TRUE</url>
+        <url>jdbc:h2:mem:foxdb;DB_CLOSE_DELAY=-1</url>
         <user>sa</user>
         <password>sa</password>
     </data-source>
