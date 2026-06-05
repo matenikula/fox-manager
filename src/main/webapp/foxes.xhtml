@@ -11,9 +11,11 @@
             justify-content: center;
             margin: 2rem 0;
         }
+
         .create-panel {
             width: 420px;
         }
+
         .form-actions {
             text-align: center;
             margin-top: 1rem;
@@ -49,23 +51,53 @@
     </div>
     <h:form id="foxForm">
         <p:dataTable id="foxTable" var="fox" value="#{foxView.foxes}"
-                     paginator="true" rows="10" emptyMessage="Nincs róka">
+                     editable="true" paginator="true" rows="10" emptyMessage="Nincs róka">
+
+            <p:ajax event="rowEdit" listener="#{foxView.onRowEdit}" update="messages" />
+            <p:ajax event="rowEditCancel" listener="#{foxView.onRowEditCancel}" update="messages" />
+
             <p:column headerText="ID" sortBy="#{fox.id}">
                 <h:outputText value="#{fox.id}"/>
             </p:column>
-            <p:column headerText="Név" sortBy="#{fox.name}" filterBy="#{fox.name}" filterMatchMode="contains">
-                <h:outputText value="#{fox.name}"/>
+
+            <p:column headerText="Név" sortBy="#{fox.name}" filterBy="#{fox.name}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{fox.name}" /></f:facet>
+                    <f:facet name="input">
+                        <p:inputText value="#{fox.name}" required="true"
+                                     requiredMessage="A név megadása kötelező" style="width:100%" />
+                    </f:facet>
+                </p:cellEditor>
             </p:column>
-            <p:column headerText="Faj" sortBy="#{fox.species}" filterBy="#{fox.species}" filterMatchMode="contains">
-                <h:outputText value="#{fox.species}"/>
+
+            <p:column headerText="Faj" sortBy="#{fox.species}" filterBy="#{fox.species}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{fox.species}" /></f:facet>
+                    <f:facet name="input"><p:inputText value="#{fox.species}" style="width:100%" /></f:facet>
+                </p:cellEditor>
             </p:column>
-            <p:column headerText="Nem" sortBy="#{fox.gender}" filterBy="#{fox.gender}">
-                <h:outputText value="#{fox.gender}"/>
+
+            <p:column headerText="Nem" sortBy="#{fox.gender}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{fox.gender}" /></f:facet>
+                    <f:facet name="input">
+                        <p:selectOneMenu value="#{fox.gender}" style="width:100%">
+                            <f:selectItems value="#{foxView.genders}" var="g"
+                                           itemLabel="#{g}" itemValue="#{g}" />
+                        </p:selectOneMenu>
+                    </f:facet>
+                </p:cellEditor>
             </p:column>
+
             <p:column headerText="Kép">
                 <h:graphicImage value="#{fox.image}" width="80" rendered="#{not empty fox.image}"/>
             </p:column>
-            <p:column headerText="Művelet">
+
+            <p:column headerText="Szerkesztés" style="width:6rem; text-align:center">
+                <p:rowEditor />
+            </p:column>
+
+            <p:column headerText="Törlés">
                 <p:commandButton icon="pi pi-trash" title="Törlés"
                                  action="#{foxView.delete(fox)}"
                                  update=":foxForm:foxTable :messages">
