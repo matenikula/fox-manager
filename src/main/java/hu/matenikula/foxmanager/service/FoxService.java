@@ -30,7 +30,6 @@ public class FoxService {
     }
 
     public Fox createFox(Fox fox) {
-        fox.setId(null); // id nullázás, hogy mindenképpen persist legyen, ne merge
         return foxRepository.save(fox);
     }
 
