@@ -30,8 +30,16 @@ public class FoxService {
     }
 
     public Fox createFox(Fox fox) {
-        fox.setId(null); // create = új entitás → persist, ne merge
         return foxRepository.save(fox);
+    }
+
+    public void updateFox(Fox fox) {
+        Fox existing = foxRepository.findById(fox.getId())
+                .orElseThrow(() -> new FoxNotFoundException(fox.getId()));
+        existing.setName(fox.getName());
+        existing.setSpecies(fox.getSpecies());
+        existing.setGender(fox.getGender());
+        // a kép automatikusan kezelt — szándékosan NEM írjuk felül,
     }
 
     public void deleteFox(Long id) {

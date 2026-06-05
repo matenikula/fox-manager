@@ -4,6 +4,7 @@ import hu.matenikula.foxmanager.domain.Fox;
 import hu.matenikula.foxmanager.domain.Gender;
 import hu.matenikula.foxmanager.service.FoxService;
 import lombok.Getter;
+import org.primefaces.event.RowEditEvent;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -56,5 +57,17 @@ public class FoxView implements Serializable {
 
     public Gender[] getGenders() {
         return Gender.values();
+    }
+
+    public void onRowEdit(RowEditEvent<Fox> event) {
+        Fox edited = event.getObject();
+        foxService.updateFox(edited);
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Mentve", "Frissítve: " + edited.getName()));
+    }
+
+    public void onRowEditCancel() {
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Megszakítva", "A szerkesztés megszakítva"));
     }
 }
