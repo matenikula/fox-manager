@@ -51,7 +51,11 @@
     </div>
     <h:form id="foxForm">
         <p:dataTable id="foxTable" var="fox" value="#{foxView.foxes}"
-                     editable="true" paginator="true" rows="10" emptyMessage="Nincs róka">
+                     editable="true" paginator="true" rows="10"
+                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     currentPageReportTemplate="{currentPage} / {totalPages} oldal — összesen {totalRecords} róka"
+                     rowsPerPageTemplate="5,10,20"
+                     emptyMessage="Nincsenek rókák az adatbázisban">
 
             <p:ajax event="rowEdit" listener="#{foxView.onRowEdit}" update="messages" />
             <p:ajax event="rowEditCancel" listener="#{foxView.onRowEditCancel}" update="messages" />

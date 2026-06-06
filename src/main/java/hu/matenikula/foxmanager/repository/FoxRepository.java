@@ -20,6 +20,17 @@ public class FoxRepository {
         return query.getResultList();
     }
 
+    public List<Fox> findAllPaged(int page, int size) {
+        return em.createQuery("SELECT f FROM Fox f ORDER BY f.id", Fox.class)
+                .setFirstResult(page * size)
+                .setMaxResults(size)
+                .getResultList();
+    }
+
+    public long count() {
+        return em.createQuery("SELECT COUNT(f) FROM Fox f", Long.class).getSingleResult();
+    }
+
     public Optional<Fox> findById(Long id) {
         return Optional.ofNullable(em.find(Fox.class, id));
     }

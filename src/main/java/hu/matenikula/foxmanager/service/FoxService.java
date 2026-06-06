@@ -24,6 +24,16 @@ public class FoxService {
     }
 
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Fox> getPagedFoxes(int page, int size) {
+        return foxRepository.findAllPaged(page, size);
+    }
+
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public long countFoxes() {
+        return foxRepository.count();
+    }
+
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Fox getFoxById(Long id) {
         return foxRepository.findById(id)
                 .orElseThrow(() -> new FoxNotFoundException(id));

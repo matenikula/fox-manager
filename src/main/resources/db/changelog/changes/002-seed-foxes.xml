@@ -6,7 +6,7 @@
             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
 
     <changeSet id="002-seed-foxes" author="mate">
-        <comment>10+ híres róka betöltése demó adatként</comment>
+        <comment>Híres rókák betöltése demó adatként</comment>
 
         <insert tableName="FOX">
             <column name="ID" valueComputed="NEXT VALUE FOR FOX_SEQ"/>

@@ -5,11 +5,13 @@ import hu.matenikula.foxmanager.exception.RequestValidationException;
 import hu.matenikula.foxmanager.rest.dto.FoxMapper;
 import hu.matenikula.foxmanager.rest.dto.FoxRequest;
 import hu.matenikula.foxmanager.rest.dto.FoxResponse;
+import hu.matenikula.foxmanager.rest.dto.PagedResponse;
 import hu.matenikula.foxmanager.service.FoxService;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
@@ -22,6 +24,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,6 +47,39 @@ public class FoxResource {
         return foxService.getAllFoxes().stream()
                 .map(FoxMapper::toResponse)
                 .collect(Collectors.toList());
+    }
+
+    @GET
+    @Operation(summary = "Rókák listázása lapozva")
+    @APIResponse(responseCode = "200", description = "Rókák egy oldala",
+            content = @Content(schema = @Schema(implementation = PagedResponse.class)))
+    @APIResponse(responseCode = "400", description = "Érvénytelen lapozási paraméter")
+    public PagedResponse<FoxResponse> getAllPaged(
+            @Parameter(description = "Oldal sorszáma (0-tól indul)")
+            @QueryParam("page") @DefaultValue("0") int page,
+            @Parameter(description = "Oldalméret (1–100)")
+            @QueryParam("size") @DefaultValue("20") int size) {
+
+        validatePaging(page, size);
+
+        List<FoxResponse> content = foxService.getPagedFoxes(page, size).stream()
+                .map(FoxMapper::toResponse)
+                .collect(Collectors.toList());
+        long total = foxService.countFoxes();
+        return new PagedResponse<>(content, page, size, total);
+    }
+
+    private void validatePaging(int page, int size) {
+        List<String> errors = new ArrayList<>();
+        if (page < 0) {
+            errors.add("A 'page' nem lehet negatív.");
+        }
+        if (size < 1 || size > 100) {
+            errors.add("A 'size' 1 és 100 közötti legyen.");
+        }
+        if (!errors.isEmpty()) {
+            throw new RequestValidationException(errors);
+        }
     }
 
     @GET
