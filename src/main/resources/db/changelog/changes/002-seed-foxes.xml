@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="002-seed-foxes" author="mate">
+        <comment>10+ híres róka betöltése demó adatként</comment>
+
+        <insert tableName="FOX">
+            <column name="ID" valueComputed="NEXT VALUE FOR FOX_SEQ"/>
+            <column name="NAME" value="Vuk"/>
+            <column name="SPECIES" value="Vörös róka"/>
+            <column name="GENDER" value="MALE"/>
+        </insert>
+        <insert tableName="FOX">
+            <column name="ID" valueComputed="NEXT VALUE FOR FOX_SEQ"/>
+            <column name="NAME" value="Reynard"/>
+            <column name="SPECIES" value="Vörös róka"/>
+            <column name="GENDER" value="MALE"/>
+        </insert>
+        <insert tableName="FOX">
+            <column name="ID" valueComputed="NEXT VALUE FOR FOX_SEQ"/>
+            <column name="NAME" value="Robin Hood"/>
+            <column name="SPECIES" value="Vörös róka"/>
+            <column name="GENDER" value="MALE"/>
+        </insert>
+        <insert tableName="FOX">
+            <column name="ID" valueComputed="NEXT VALUE FOR FOX_SEQ"/>
+            <column name="NAME" value="Mr. Fox"/>
+            <column name="SPECIES" value="Vörös róka"/>
+            <column name="GENDER" value="MALE"/>
+        </insert>
+        <insert tableName="FOX">
+            <column name="ID" valueComputed="NEXT VALUE FOR FOX_SEQ"/>
+            <column name="NAME" value="Karak"/>
+            <column name="SPECIES" value="Vörös róka"/>
+            <column name="GENDER" value="MALE"/>
+        </insert>
+        <insert tableName="FOX">
+            <column name="ID" valueComputed="NEXT VALUE FOR FOX_SEQ"/>
+            <column name="NAME" value="Michael J. Fox"/>
+            <column name="SPECIES" value="Vörös róka"/>
+            <column name="GENDER" value="MALE"/>
+        </insert>
+        <insert tableName="FOX">
+            <column name="ID" valueComputed="NEXT VALUE FOR FOX_SEQ"/>
+            <column name="NAME" value="Megan Fox"/>
+            <column name="SPECIES" value="Vörös róka"/>
+            <column name="GENDER" value="FEMALE"/>
+        </insert>
+        <insert tableName="FOX">
+            <column name="ID" valueComputed="NEXT VALUE FOR FOX_SEQ"/>
+            <column name="NAME" value="Jamie Foxx"/>
+            <column name="SPECIES" value="Vörös róka"/>
+            <column name="GENDER" value="MALE"/>
+        </insert>
+        <insert tableName="FOX">
+            <column name="ID" valueComputed="NEXT VALUE FOR FOX_SEQ"/>
+            <column name="NAME" value="Lucius Fox"/>
+            <column name="SPECIES" value="Vörös róka"/>
+            <column name="GENDER" value="MALE"/>
+        </insert>
+        <insert tableName="FOX">
+            <column name="ID" valueComputed="NEXT VALUE FOR FOX_SEQ"/>
+            <column name="NAME" value="Matthew Fox"/>
+            <column name="SPECIES" value="Vörös róka"/>
+            <column name="GENDER" value="MALE"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
