@@ -39,7 +39,7 @@
                     <p:selectOneMenu id="gender" value="#{foxView.newFox.gender}" required="true"
                                      requiredMessage="A nem megadása kötelező">
                         <f:selectItem itemLabel="Válassz..." itemValue="#{null}" noSelectionOption="true"/>
-                        <f:selectItems value="#{foxView.genders}" var="g" itemLabel="#{g}" itemValue="#{g}"/>
+                        <f:selectItems value="#{foxView.genders}" var="g" itemLabel="#{g.displayName}" itemValue="#{g}"/>
                     </p:selectOneMenu>
                 </h:panelGrid>
                 <div class="form-actions">
@@ -83,11 +83,11 @@
 
             <p:column headerText="Nem" sortBy="#{fox.gender}">
                 <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{fox.gender}" /></f:facet>
+                    <f:facet name="output"><h:outputText value="#{fox.gender.displayName}" /></f:facet>
                     <f:facet name="input">
                         <p:selectOneMenu value="#{fox.gender}" style="width:100%">
                             <f:selectItems value="#{foxView.genders}" var="g"
-                                           itemLabel="#{g}" itemValue="#{g}" />
+                                           itemLabel="#{g.displayName}" itemValue="#{g}" />
                         </p:selectOneMenu>
                     </f:facet>
                 </p:cellEditor>
