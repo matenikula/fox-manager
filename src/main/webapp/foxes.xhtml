@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Fox Manager</title>
+    <style>
+        .center-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .create-panel {
+            width: 420px;
+        }
+
+        .form-actions {
+            text-align: center;
+            margin-top: 1rem;
+        }
+    </style>
+</h:head>
+<h:body>
+    <p:growl id="messages" showDetail="true"/>
+    <div class="center-wrapper">
+        <h:form id="createForm">
+            <p:panel header="Új róka létrehozása" styleClass="create-panel">
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="name" value="Név"/>
+                    <p:inputText id="name" value="#{foxView.newFox.name}" required="true"
+                                 requiredMessage="A név megadása kötelező"/>
+
+                    <p:outputLabel for="species" value="Faj"/>
+                    <p:inputText id="species" value="#{foxView.newFox.species}"/>
+
+                    <p:outputLabel for="gender" value="Nem"/>
+                    <p:selectOneMenu id="gender" value="#{foxView.newFox.gender}" required="true"
+                                     requiredMessage="A nem megadása kötelező">
+                        <f:selectItem itemLabel="Válassz..." itemValue="#{null}" noSelectionOption="true"/>
+                        <f:selectItems value="#{foxView.genders}" var="g" itemLabel="#{g.displayName}" itemValue="#{g}"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <div class="form-actions">
+                    <p:commandButton value="Mentés" action="#{foxView.save}"
+                                     process="@form" update="@form :messages :foxForm:foxTable"/>
+                </div>
+            </p:panel>
+        </h:form>
+    </div>
+    <h:form id="foxForm">
+        <p:dataTable id="foxTable" var="fox" value="#{foxView.foxes}"
+                     editable="true" paginator="true" rows="10"
+                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     currentPageReportTemplate="{currentPage} / {totalPages} oldal — összesen {totalRecords} róka"
+                     rowsPerPageTemplate="5,10,20"
+                     emptyMessage="Nincsenek rókák az adatbázisban">
+
+            <p:ajax event="rowEdit" listener="#{foxView.onRowEdit}" update="messages" />
+            <p:ajax event="rowEditCancel" listener="#{foxView.onRowEditCancel}" update="messages" />
+
+            <p:column headerText="ID" sortBy="#{fox.id}">
+                <h:outputText value="#{fox.id}"/>
+            </p:column>
+
+            <p:column headerText="Név" sortBy="#{fox.name}" filterBy="#{fox.name}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{fox.name}" /></f:facet>
+                    <f:facet name="input">
+                        <p:inputText value="#{fox.name}" required="true"
+                                     requiredMessage="A név megadása kötelező" style="width:100%" />
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="Faj" sortBy="#{fox.species}" filterBy="#{fox.species}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{fox.species}" /></f:facet>
+                    <f:facet name="input"><p:inputText value="#{fox.species}" style="width:100%" /></f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="Nem" sortBy="#{fox.gender}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{fox.gender.displayName}" /></f:facet>
+                    <f:facet name="input">
+                        <p:selectOneMenu value="#{fox.gender}" style="width:100%">
+                            <f:selectItems value="#{foxView.genders}" var="g"
+                                           itemLabel="#{g.displayName}" itemValue="#{g}" />
+                        </p:selectOneMenu>
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="Kép">
+                <h:graphicImage value="#{fox.image}" width="80" rendered="#{not empty fox.image}"/>
+            </p:column>
+
+            <p:column headerText="Szerkesztés" style="width:6rem; text-align:center">
+                <p:rowEditor />
+            </p:column>
+
+            <p:column headerText="Törlés">
+                <p:commandButton icon="pi pi-trash" title="Törlés"
+                                 action="#{foxView.delete(fox)}"
+                                 update=":foxForm:foxTable :messages">
+                    <p:confirm header="Megerősítés" message="Biztosan törlöd ezt a rókát?"
+                               icon="pi pi-exclamation-triangle"/>
+                </p:commandButton>
+            </p:column>
+        </p:dataTable>
+    </h:form>
+
+    <p:confirmDialog global="true" showEffect="fade">
+        <p:commandButton value="Igen" type="button" styleClass="ui-confirmdialog-yes"/>
+        <p:commandButton value="Nem" type="button" styleClass="ui-confirmdialog-no"/>
+    </p:confirmDialog>
+</h:body>
+</html>
